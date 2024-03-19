@@ -4,6 +4,7 @@
 #include "Tank.h"
 
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ATank::ATank()
 {
@@ -34,7 +35,7 @@ void ATank::Move(float Value)
 
 void ATank::Turn(float Value)
 {
-	FRotator NewRotation = FRotator(0, Value * TurnSpeed * GetWorld()->DeltaTimeSeconds, 0);
+	FRotator NewRotation = FRotator(0, Value * TurnSpeed * UGameplayStatics::GetWorldDeltaSeconds(this), 0);
 	AddActorLocalRotation(
 		NewRotation,
 		true,

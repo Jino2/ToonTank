@@ -23,14 +23,22 @@ public:
 
 	UPROPERTY(EditInstanceOnly, Category = "Movement")
 	float TurnSpeed = 100.f;
+	
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	virtual void Tick(float DeltaSeconds) override;
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Player Camera")
 	class USpringArmComponent* SpringArm;
 	UPROPERTY(VisibleAnywhere, Category = "Player Camera")
 	UCameraComponent* PlayerCamera;
-
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
 	void Move(float Value);
 	void Turn(float Value);
+	void RotateTurret(FVector LookAtTarget);
+
+	APlayerController* PlayerControllerRef;
 };

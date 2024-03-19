@@ -5,6 +5,14 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
+
+// Called when the game starts or when spawned
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+	PlayerControllerRef = Cast<APlayerController>(GetController());
+}
 
 ATank::ATank()
 {
@@ -21,6 +29,21 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+}
+
+void ATank::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (PlayerControllerRef)
+	{
+		FHitResult TraceHitResult;
+		PlayerControllerRef->GetHitResultUnderCursor(ECC_Visibility, false, TraceHitResult);
+		FVector HitLocation = TraceHitResult.ImpactPoint;
+		RotateTurret(HitLocation);
+
+		//for debugging
+		// DrawDebugSphere(GetWorld(), HitLocation, 15.f, 10, FColor::Red, false, -1.f);
+	}
 }
 
 void ATank::Move(float Value)
@@ -42,4 +65,18 @@ void ATank::Turn(float Value)
 		nullptr,
 		ETeleportType::None
 	);
+}
+
+void ATank::RotateTurret(FVector LookAtTarget)
+{
+	// Update TurretMesh rotation to face LookAtTarget
+	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
+	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
+	LookAtRotation = FMath::RInterpTo(
+		TurretMesh->GetComponentRotation(),
+		LookAtRotation,
+		UGameplayStatics::GetWorldDeltaSeconds(this),
+		6.f
+	);
+	TurretMesh->SetWorldRotation(LookAtRotation);
 }

@@ -19,7 +19,11 @@ void UHealthPointComponent::DamageTaken(AActor* DamageActor, float Damage, const
 {
 	if(Damage <= 0.f) return;
 	CurrentHealthPoint -= Damage;
-	UE_LOG(LogTemp, Warning, TEXT("Health left: %f"), CurrentHealthPoint);
+
+	if(CurrentHealthPoint <= 0.f)
+	{
+		ToonTanksGameMode->ActorDied(GetOwner());
+	}
 }
 
 // Called when the game starts
@@ -29,6 +33,8 @@ void UHealthPointComponent::BeginPlay()
 
 	CurrentHealthPoint = MaxHealthPoint;
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthPointComponent::DamageTaken);
+
+	ToonTanksGameMode = Cast<AToonTanksGameMode>(GetWorld()->GetAuthGameMode());
 }
 
 

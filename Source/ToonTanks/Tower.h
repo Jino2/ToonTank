@@ -23,6 +23,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float FireRatePerSec = 1.f;
 
+	void HandleDestruction();
 protected:
 	virtual void BeginPlay() override;
 	

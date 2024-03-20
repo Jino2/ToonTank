@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ToonTanksGameMode.h"
 #include "Components/ActorComponent.h"
 #include "HealthPointComponent.generated.h"
 
@@ -25,6 +26,8 @@ private:
 
 	UFUNCTION()
 	void DamageTaken(AActor* DamageActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+
+	AToonTanksGameMode* ToonTanksGameMode;
 	
 protected:
 	// Called when the game starts

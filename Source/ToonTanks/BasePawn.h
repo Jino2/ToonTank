@@ -16,7 +16,7 @@ class TOONTANKS_API ABasePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
-
+	void HandleDestruction();
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	UCapsuleComponent* CapsuleComp;
@@ -41,4 +41,5 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category="Combat")
 	TSubclassOf<AProjectile> ProjectileClass;
+	
 };

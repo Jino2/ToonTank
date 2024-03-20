@@ -21,6 +21,12 @@ ABasePawn::ABasePawn()
 	ProjectileSpawnPoint->SetupAttachment(TurretMesh);
 }
 
+void ABasePawn::HandleDestruction()
+{
+	// todo: Visual /sound Effects
+	
+}
+
 void ABasePawn::RotateTurret(FVector LookAtTarget)
 {
 	// Update TurretMesh rotation to face LookAtTarget

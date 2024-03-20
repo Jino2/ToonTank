@@ -17,32 +17,49 @@ void AToonTanksGameMode::ActorDied(AActor* DeadActor)
 		{
 			ToonTanksPlayerController->SetPlayerEnableState(false);
 		}
+		GameOver(false);
 	}
 	else if (auto DestroyedTower = Cast<ATower>(DeadActor))
 	{
 		DestroyedTower->HandleDestruction();
+		--TargetTowerCount;
+		UE_LOG(LogTemp, Warning, TEXT("Target Towers: %d"), TargetTowerCount);
+		if(TargetTowerCount == 0)
+		{
+			GameOver(true);
+		}
 	}
 }
 
 void AToonTanksGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	HandleGameStart();
 }
 
 void AToonTanksGameMode::HandleGameStart()
 {
-	StartGame();
+	TargetTowerCount = GetTargetTowerCount();
+	
 	Tank = Cast<ATank>(UGameplayStatics::GetPlayerPawn(this, 0));
 	ToonTanksPlayerController = Cast<AToonTanksPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 
-	if(ToonTanksPlayerController)
+	if (ToonTanksPlayerController)
 	{
 		ToonTanksPlayerController->SetPlayerEnableState(false);
 
 		FTimerHandle PlayerEnableTimerHandle;
-		FTimerDelegate PlayerEnableDelegate = FTimerDelegate::CreateUObject(ToonTanksPlayerController, &AToonTanksPlayerController::SetPlayerEnableState, true);
+		FTimerDelegate PlayerEnableDelegate = FTimerDelegate::CreateUObject(
+			ToonTanksPlayerController, &AToonTanksPlayerController::SetPlayerEnableState, true);
 		GetWorldTimerManager().SetTimer(PlayerEnableTimerHandle, PlayerEnableDelegate, StartDelay, false);
 	}
+	StartGame();
+}
+
+int32 AToonTanksGameMode::GetTargetTowerCount()
+{
+	TArray<AActor*> FoundTowers;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATower::StaticClass(), FoundTowers);
+	return FoundTowers.Num();
 }

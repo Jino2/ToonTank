@@ -38,7 +38,6 @@ private:
 	
 	void Move(float Value);
 	void Turn(float Value);
-	void RotateTurret(FVector LookAtTarget);
 
 	APlayerController* PlayerControllerRef;
 };

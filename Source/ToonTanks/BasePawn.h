@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Projectile.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Pawn.h"
 #include "BasePawn.generated.h"
@@ -26,13 +27,18 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint;
 
+	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	UStaticMeshComponent* TurretMesh;
+
+	void RotateTurret(FVector LookAtTarget);
+	void Fire();
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
+	TSubclassOf<AProjectile> ProjectileClass;
 };

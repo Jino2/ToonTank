@@ -29,6 +29,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ATank::Move);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ATank::Turn);
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &ATank::Fire);
 }
 
 void ATank::Tick(float DeltaSeconds)
@@ -65,18 +66,4 @@ void ATank::Turn(float Value)
 		nullptr,
 		ETeleportType::None
 	);
-}
-
-void ATank::RotateTurret(FVector LookAtTarget)
-{
-	// Update TurretMesh rotation to face LookAtTarget
-	FVector ToTarget = LookAtTarget - TurretMesh->GetComponentLocation();
-	FRotator LookAtRotation = FRotator(0.f, ToTarget.Rotation().Yaw, 0.f);
-	LookAtRotation = FMath::RInterpTo(
-		TurretMesh->GetComponentRotation(),
-		LookAtRotation,
-		UGameplayStatics::GetWorldDeltaSeconds(this),
-		6.f
-	);
-	TurretMesh->SetWorldRotation(LookAtRotation);
 }

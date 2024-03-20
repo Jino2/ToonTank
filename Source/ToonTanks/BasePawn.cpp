@@ -27,6 +27,10 @@ void ABasePawn::HandleDestruction()
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation());
 	}
+	if (DeathCameraShakeClass)
+	{
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(DeathCameraShakeClass);
+	}
 }
 
 void ABasePawn::RotateTurret(FVector LookAtTarget)

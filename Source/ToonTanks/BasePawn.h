@@ -16,7 +16,7 @@ class TOONTANKS_API ABasePawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ABasePawn();
-	void HandleDestruction();
+	virtual void HandleDestruction();
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	UCapsuleComponent* CapsuleComp;
@@ -30,6 +30,8 @@ private:
 	UPROPERTY(EditAnywhere, Category="Combat", meta=(AllowPrivateAccess = "true"))
 	UParticleSystem* DeathParticle;
 
+	UPROPERTY(EditAnywhere, Category="Combat", meta=(AllowPrivateAccess = "true"))
+	TSubclassOf<UCameraShakeBase> DeathCameraShakeClass;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	UStaticMeshComponent* TurretMesh;

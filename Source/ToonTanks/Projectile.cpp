@@ -3,35 +3,47 @@
 
 #include "Projectile.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 AProjectile::AProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.	
 	PrimaryActorTick.bCanEverTick = false;
 
-	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule Collider"));
-	RootComponent = CapsuleComp;
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile Mesh"));
-	ProjectileMesh->SetupAttachment(CapsuleComp);
+	RootComponent = ProjectileMesh;
 
-	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
+	ProjectileMovementComp = CreateDefaultSubobject<
+		UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	ProjectileMovementComp->MaxSpeed = 1300.f;
 	ProjectileMovementComp->InitialSpeed = 1300.f;
 }
 
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                        FVector NormalImpulse, const FHitResult& Hit)
+{
+	auto MyOwner = GetOwner();
+	if (MyOwner == nullptr) return;
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwner->GetInstigatorController(), this,
+		                              UDamageType::StaticClass());
+		RootComponent->DestroyComponent();
+	}
+}
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
-// Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-

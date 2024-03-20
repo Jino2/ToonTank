@@ -42,6 +42,7 @@ void ABasePawn::Fire()
 		ProjectileSpawnPoint->GetComponentLocation(),
 		ProjectileSpawnPoint->GetComponentRotation()
 	);
+	SpawnedProjectile->SetOwner(this);
 }
 
 // Called every frame

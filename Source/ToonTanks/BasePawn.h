@@ -27,7 +27,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	USceneComponent* ProjectileSpawnPoint;
 
-	
+	UPROPERTY(EditAnywhere, Category="Combat", meta=(AllowPrivateAccess = "true"))
+	UParticleSystem* DeathParticle;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta=(AllowPrivateAccess = "true"))
 	UStaticMeshComponent* TurretMesh;

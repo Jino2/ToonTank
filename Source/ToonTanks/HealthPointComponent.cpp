@@ -10,7 +10,6 @@ UHealthPointComponent::UHealthPointComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
 
@@ -20,6 +19,7 @@ void UHealthPointComponent::DamageTaken(AActor* DamageActor, float Damage, const
 	if(Damage <= 0.f) return;
 	CurrentHealthPoint -= Damage;
 
+	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), CurrentHealthPoint);
 	if(CurrentHealthPoint <= 0.f)
 	{
 		ToonTanksGameMode->ActorDied(GetOwner());

@@ -26,6 +26,12 @@ private:
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UPROPERTY(EditAnywhere, Category="Combat", meta=(AllowPrivateAccess = "true"))
+	UParticleSystem* HitParticle;
+
+	UPROPERTY(VisibleAnywhere, Category="Combat", meta=(AllowPrivateAccess = "true"))
+	UParticleSystemComponent* TrailParticle;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,5 +41,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, Category="Damage")
-	float Damage = 50.f;
+	float Damage = 20.f;
 };
